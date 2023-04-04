@@ -4,7 +4,8 @@ export default createStore({
     state() {
         return {
             documento: null,
-            page: null
+            page: null,
+            ratio: null
         }
     },
     mutations: {
@@ -13,6 +14,9 @@ export default createStore({
         },
         setPage(state, p) {
             state.page = p
+        },
+        setRatio(state,r){
+            state.ratio = r
         }
     }
 })

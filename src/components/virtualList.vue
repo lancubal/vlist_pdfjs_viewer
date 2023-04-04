@@ -31,12 +31,14 @@ height: 90vh;
 border-radius: 25px;
 }
 .wrapperProps{
-    max-width: 24rem;
+    max-width: 100%;
 }
 .item{
     border-radius: 25px;
     height: 80px;
-    margin-bottom: 4px;
+    margin-bottom: 16px;
+    background-color: gray;
+    color: white;
 }
 .index{
 

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <PDFViewer/> 
+    <PDFViewer widthValue="960"/> 
     <!-- <virtualList /> -->
   </div>
 </template>

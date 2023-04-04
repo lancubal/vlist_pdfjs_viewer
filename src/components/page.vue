@@ -1,21 +1,35 @@
 <template>
     <div class="page">
-        <canvas :id="'the-canvas' + props.numPagina" class="canvas"></canvas>
+        <canvas :id="'the-canvas' + props.numPagina" class="canvas" :style="{ height: props.height, width:props.width }" ></canvas>
     </div>
 </template>
 
 <script setup>
 import * as pdfjsLib from "pdfjs-dist";
 
-import { onMounted, toRaw } from "vue";
+import { onMounted, toRaw, onUnmounted } from "vue";
 import store from "../store";
-const props = defineProps(['numPagina'])
+const props = defineProps(['numPagina','height','width'])
 
 pdfjsLib.GlobalWorkerOptions.workerSrc =
   "/lib/pdf.worker.js";
 
 onMounted(() => {
   renderPage();
+
+  // TODO - Cambiar esto
+  let scrollWidth = document.querySelector('.pdfScroll').offsetWidth - 20
+  console.log(scrollWidth)
+  let pageWidth = scrollWidth * 0.8
+  let pageElement = document.querySelector("#the-canvas" + props.numPagina)
+  pageElement.style.width = pageWidth + 'px' 
+  let margin = ((scrollWidth - pageWidth) / 2) + 'px'
+  pageElement.style.margin = '0 0 0 ' + margin
+  console.log(pageWidth*1.1678933240973244)
+});
+
+onUnmounted(() => {
+  console.log("Unmounted page " + (props.numPagina + 1))
 });
 
 async function renderPage() {
@@ -39,7 +53,7 @@ async function renderPage() {
         };
         var renderTask = page.render(renderContext);
         renderTask.promise.then(function () {
-          console.log("Page rendered");
+          console.log("Page rendered " + (props.numPagina + 1));
         });
       });
 }
@@ -47,9 +61,10 @@ async function renderPage() {
 </script>
 
 <style lang="scss">
+
 .canvas{
-  width: 800px;
   padding: 5px 0;
 }
+
 
 </style>
