@@ -31,41 +31,13 @@ import { useVirtualList } from "@vueuse/core";
 import Page from "./page.vue";
 
 import store from "../store";
-const props = defineProps(["widthValue"]);
+const props = defineProps(["widthValue", "cantidadDePaginas", "pageRatio"]);
 
-console.log(props.widthValue);
-
-pdfjsLib.GlobalWorkerOptions.workerSrc = "/lib/pdf.worker.js";
-
-let cantidadDePaginas = ref(0);
 const paginas = computed(() =>
-  Array.from(Array(cantidadDePaginas.value).keys())
+  Array.from(Array(props.cantidadDePaginas).keys())
 );
 
-let pageWidth = props.widthValue - 20;
-let pageRatio = ref(1);
-
-async function getPdf() {
-  var loadingTask = pdfjsLib.getDocument("test.pdf");
-  loadingTask.promise.then(
-    function (pdf) {
-      console.log("PDF loaded");
-      store.commit("setDocumento", pdf);
-      cantidadDePaginas.value = pdf.numPages;
-
-      pdf.getPage(1).then(function (page) {
-        var scale = 1;
-        var viewport = page.getViewport({ scale: scale });
-        pageRatio.value = viewport.height / viewport.width;
-        console.log("pageRatio", pageRatio.value);
-        store.commit('setRatio',viewport.height / viewport.width)
-      });
-    },
-    function (error) {
-      console.error("Error cargando PDF", error);
-    }
-  );
-}
+let pageWidth = props.widthValue *0.8;
 
 onMounted(() => {
   document.querySelector(".pdfViewer").style.width = props.widthValue + "px";
@@ -73,15 +45,10 @@ onMounted(() => {
     props.widthValue + "px";
 });
 
-getPdf();
-
-let pageHeigth = store.state.ratio * pageWidth
-console.log(pageHeigth)
-
-
+let pageHeigth = pageWidth * props.pageRatio + 10;
 
 const { list, containerProps, wrapperProps } = useVirtualList(paginas, {
-   itemHeight: store.state.ratio * pageWidth,
+  itemHeight: pageHeigth,
 });
 </script>
 

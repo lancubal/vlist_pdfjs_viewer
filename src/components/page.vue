@@ -1,6 +1,6 @@
 <template>
     <div class="page">
-        <canvas :id="'the-canvas' + props.numPagina" class="canvas" :style="{ height: props.height, width:props.width }" ></canvas>
+        <canvas :id="'the-canvas' + props.numPagina" class="canvas" ></canvas>
     </div>
 </template>
 
@@ -16,16 +16,9 @@ pdfjsLib.GlobalWorkerOptions.workerSrc =
 
 onMounted(() => {
   renderPage();
-
-  // TODO - Cambiar esto
-  let scrollWidth = document.querySelector('.pdfScroll').offsetWidth - 20
-  console.log(scrollWidth)
-  let pageWidth = scrollWidth * 0.8
   let pageElement = document.querySelector("#the-canvas" + props.numPagina)
-  pageElement.style.width = pageWidth + 'px' 
-  let margin = ((scrollWidth - pageWidth) / 2) + 'px'
-  pageElement.style.margin = '0 0 0 ' + margin
-  console.log(pageWidth*1.1678933240973244)
+  pageElement.style.width = props.width + 'px' 
+  pageElement.style.height = props.height + 'px' 
 });
 
 onUnmounted(() => {
