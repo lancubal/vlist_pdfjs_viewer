@@ -6,6 +6,7 @@
 
 <script setup>
 import * as pdfjsLib from "pdfjs-dist";
+import debounce from "@/helpers/debounce";
 
 import { onMounted, toRaw, onUnmounted } from "vue";
 import store from "../store";
@@ -15,20 +16,20 @@ pdfjsLib.GlobalWorkerOptions.workerSrc =
   "/lib/pdf.worker.js";
 
 onMounted(() => {
-  renderPage();
+  renderPage_debounced()
   let pageElement = document.querySelector("#the-canvas" + props.numPagina)
   pageElement.style.width = props.width + 'px' 
   pageElement.style.height = props.height + 'px' 
 });
+
+let renderPage_debounced = debounce(renderPage,500)
 
 onUnmounted(() => {
   console.log("Unmounted page " + (props.numPagina + 1))
 });
 
 async function renderPage() {
-  
   const rawObjectOrArray = toRaw(store.state.documento);
-  console.log(props.numPagina + 1)
       rawObjectOrArray.getPage(props.numPagina+1).then(function (page) {
         store.commit("setPage", page);
 
